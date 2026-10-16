@@ -1,5 +1,6 @@
 package com.example.moodtrackerapp
 
+import androidx.compose.ui.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -32,6 +33,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -82,6 +84,10 @@ class MainActivity : ComponentActivity() {
                 Yang belum cuma `content` dan dia butuh parameter bertipe `PaddingValues`.
                 Waktu manggil fungsi ini, `trailing lambda` langsung tau kalo ini itu mengisi param `content` karena cuma
                 param lambda itu yang butuh parameter. Dan nama parameter `PaddingValues` ditulis secara eksplisit dengan nama `innerPadding`
+                 */
+
+                /*
+                NOTES (rumus fungsi lambda): { parameter -> kode_yang_dieksekusi }
                  */
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     /*
@@ -151,10 +157,10 @@ private fun CalendarCell(
         modifier = modifier
             .aspectRatio(1f)
             .fillMaxSize()
-            .padding(2.dp)
+            .padding(10.dp)
             .background(
                 shape = RoundedCornerShape(CornerSize(8.dp)),
-                color = colorScheme.secondaryContainer,
+                color = Color.Magenta
             )
             .clip(RoundedCornerShape(CornerSize(8.dp)))
             .clickable(onClick = onClick)
@@ -167,7 +173,7 @@ private fun CalendarCell(
                     .padding(8.dp)
                     .background(
                         shape = CircleShape,
-                        color = colorScheme.tertiaryContainer.copy(alpha = 0.7f)
+                        color = Color.Blue
                     )
             )
         }
@@ -190,11 +196,12 @@ private fun WeekdayCell(weekday: Int, modifier: Modifier = Modifier) {
         modifier = modifier
             .aspectRatio(1f)
             .fillMaxSize()
+            .background( color = Color.Blue )
     ) {
         Text(
             text = text.orEmpty(),
             color = colorScheme.onPrimaryContainer,
-            modifier = Modifier.align(Alignment.BottomCenter)
+            modifier = Modifier.align(Alignment.Center)
         )
     }
 }
@@ -238,6 +245,13 @@ private fun CalendarCustomLayout(
     verticalGapDp: Dp = 2.dp,
     content: @Composable () -> Unit,
 ) {
+    /*
+        NOTES (rumus fungsi with): 'with this object, do the following.'
+        'with' is used to access an object's members and methods without having to refer to the object once per access.
+        It is (mostly) for abbreviating your code.
+
+        LINK: https://stackoverflow.com/questions/45873205/what-does-with-mean-in-kotlin
+     */
     val horizontalGap = with(LocalDensity.current) {
         horizontalGapDp.roundToPx()
     }
@@ -251,6 +265,9 @@ private fun CalendarCustomLayout(
         val totalWidthWithoutGap = constraints.maxWidth - (horizontalGap * 6)
         val singleWidth = totalWidthWithoutGap / 7
 
+        /*
+            NOTES: var is variable (mutable); val is value (immutable);
+         */
         val xPos: MutableList<Int> = mutableListOf()
         val yPos: MutableList<Int> = mutableListOf()
         var currentX = 0
@@ -297,7 +314,10 @@ fun CalendarView(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = Modifier
+                .fillMaxWidth()
+                .background(color = Color.Magenta)
+        ) {
             if (displayPrev)
                 CustomIconButton(
                     onClick = onClickPrev,
@@ -329,6 +349,7 @@ fun CalendarView(
                     .wrapContentHeight()
                     .padding(horizontal = 16.dp)
                     .align(Alignment.CenterHorizontally)
+                    .background( color = Color.LightGray )
             )
         }
     }

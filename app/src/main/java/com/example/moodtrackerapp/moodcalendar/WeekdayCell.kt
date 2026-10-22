@@ -15,7 +15,6 @@ fun WeekdayCell(weekday: Int, modifier: Modifier = Modifier) {
     val text = weekday.getDayOfWeek3Letters()
     Box(
         modifier = modifier
-            .background( color = Color.Blue )
     ) {
         Text(
             text = text.orEmpty(),

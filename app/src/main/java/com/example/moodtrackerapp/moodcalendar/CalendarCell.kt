@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +30,7 @@ fun CalendarCell(
             .padding(1.dp)
             .background(
 //                shape = RoundedCornerShape(CornerSize(8.dp)),
-                color = Color.Magenta
+                color = MaterialTheme.colorScheme.secondary
             )
 //            .clip(RoundedCornerShape(CornerSize(8.dp)))
             .clickable(onClick = onClick)
@@ -49,7 +50,7 @@ fun CalendarCell(
                     .size(10.dp)
                     .background(
                         shape = CircleShape,
-                        color = Color.Blue
+                        color = MaterialTheme.colorScheme.tertiary
                     )
                     .align(Alignment.TopStart)
             )

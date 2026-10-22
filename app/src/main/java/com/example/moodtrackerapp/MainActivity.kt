@@ -6,19 +6,26 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.ui.Modifier
-import com.example.moodtrackerapp.ui.theme.MoodTrackerAppTheme
-import java.util.Calendar
-import java.util.Date
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import com.example.moodtrackerapp.moodcalendar.CalendarView
 import com.example.moodtrackerapp.util.addMonths
 import com.example.moodtrackerapp.util.getDatesOfMonth
+// Import package baru yang benar
+import com.example.moodtrackerapp.ui.components.AlertDialogExample
+import com.example.moodtrackerapp.ui.theme.MoodTrackerAppTheme
+import com.example.moodtrackerapp.ui.theme.darkText
+import com.example.moodtrackerapp.util.formatToCalendarDay
 import kotlinx.collections.immutable.toImmutableList
+import java.util.Calendar
+import java.util.Date
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +64,11 @@ class MainActivity : ComponentActivity() {
                 /*
                 NOTES (rumus fungsi lambda): { parameter -> kode_yang_dieksekusi }
                  */
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    containerColor = MaterialTheme.colorScheme.background,
+                    contentColor = MaterialTheme.colorScheme.darkText
+                ) { innerPadding ->
                     /*
                         NOTES:
                         "Month" adalah nama objek MutableStateOf yang valuenya berupa objek Date.
@@ -74,6 +85,10 @@ class MainActivity : ComponentActivity() {
                             date to (day % 2 == 0) // Tanggal genap = true (ada signal)
                         }.toImmutableList()
                     }
+
+                    // Buat State untuk menampung tanggal yang diklik
+                    var selectedDate by remember { mutableStateOf<Date?>(null) }
+
                     /*
                         NOTES:
                         Fungsi "remember" berguna untuk mempertahankan nilai sebuah variable.
@@ -89,10 +104,23 @@ class MainActivity : ComponentActivity() {
                         displayPrev = true,
                         onClickNext = { month = month.addMonths(1) },
                         onClickPrev = { month = month.addMonths(-1) },
-                        onClick = { clickedDate -> /* nanti: buka form mood */ },
+                        onClick = { clickedDate ->
+                            selectedDate = clickedDate
+                        },
                         startFromSunday = true,
                         modifier = Modifier.padding(innerPadding)
                     )
+
+                    // Panggil AlertDialogExample di luar onClick, secara kondisional
+                    selectedDate?.let { date ->
+                        AlertDialogExample(
+                            onDismissRequest = { selectedDate = null },
+                            onConfirmation = { selectedDate = null },
+                            dialogTitle = "Catat Mood",
+                            dialogText = "Kamu memilih tanggal ${date.formatToCalendarDay()}",
+                            icon = Icons.Default.Info
+                        )
+                    }
                 }
             }
         }

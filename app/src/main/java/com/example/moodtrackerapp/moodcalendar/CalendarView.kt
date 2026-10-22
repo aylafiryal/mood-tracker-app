@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
@@ -33,7 +34,7 @@ fun CalendarView(
     Column(modifier = modifier) {
         Box(modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color.Magenta)
+            .background(color = MaterialTheme.colorScheme.tertiary)
         ) {
             if (displayPrev)
                 CustomIconButton(
@@ -66,7 +67,7 @@ fun CalendarView(
                     .weight(1f)
                     .padding(horizontal = 10.dp)
                     .align(Alignment.CenterHorizontally)
-                    .background( color = Color.LightGray )
+                    .background( color = MaterialTheme.colorScheme.background )
             )
         }
     }

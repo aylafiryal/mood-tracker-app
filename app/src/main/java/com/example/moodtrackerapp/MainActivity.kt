@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.moodtrackerapp.moodcalendar.CalendarView
@@ -86,8 +87,8 @@ class MainActivity : ComponentActivity() {
                         }.toImmutableList()
                     }
 
-                    // Buat State untuk menampung tanggal yang diklik
-                    var selectedDate by remember { mutableStateOf<Date?>(null) }
+                    // ✅ Ubah jadi rememberSaveable
+                    var selectedDate by rememberSaveable { mutableStateOf<Date?>(null) }
 
                     /*
                         NOTES:
@@ -96,6 +97,9 @@ class MainActivity : ComponentActivity() {
                         Tipe data hasil yang bisa didelegasikan syaratnya adalah: punya fungsi getValue.
                         Biar kalo mau ubah value, bisa langsung dari variabelnya sendiri.
                      */
+
+                    // 1. Pakai rememberSaveable agar state dialog tidak ter-reset saat recomposition/rotasi
+                    var showMoodDialog by rememberSaveable { mutableStateOf(false) }
 
                     CalendarView(
                         month = month,
@@ -106,18 +110,33 @@ class MainActivity : ComponentActivity() {
                         onClickPrev = { month = month.addMonths(-1) },
                         onClick = { clickedDate ->
                             selectedDate = clickedDate
+                            showMoodDialog = true // Trigger dialog baru di sini
                         },
                         startFromSunday = true,
                         modifier = Modifier.padding(innerPadding)
                     )
 
                     // Panggil AlertDialogExample di luar onClick, secara kondisional
-                    selectedDate?.let { date ->
+//                    selectedDate?.let { date ->
+//                        AlertDialogExample(
+//                            onDismissRequest = { selectedDate = null },
+//                            onConfirmation = { selectedDate = null },
+//                            dialogTitle = "Catat Mood",
+//                            dialogText = "Kamu memilih tanggal ${date.formatToCalendarDay()}",
+//                            icon = Icons.Default.Info
+//                        )
+//                    }
+                    if (showMoodDialog && selectedDate != null) {
                         AlertDialogExample(
-                            onDismissRequest = { selectedDate = null },
-                            onConfirmation = { selectedDate = null },
+                            onDismissRequest = {
+                                showMoodDialog = false // Cukup tutup dialog tanpa langsung mengganggu state selectedDate
+                            },
+                            onConfirmation = {
+                                // Simpan mood ke database di sini
+                                showMoodDialog = false
+                            },
                             dialogTitle = "Catat Mood",
-                            dialogText = "Kamu memilih tanggal ${date.formatToCalendarDay()}",
+                            dialogText = "Kamu memilih tanggal ${selectedDate?.formatToCalendarDay()}",
                             icon = Icons.Default.Info
                         )
                     }

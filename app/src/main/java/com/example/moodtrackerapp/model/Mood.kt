@@ -1,9 +1,6 @@
 package com.example.moodtrackerapp.model
 
-import android.R.attr.entries
-import android.icu.lang.UCharacter.JoiningGroup.SAD
 import androidx.annotation.DrawableRes
-import androidx.compose.ui.graphics.Color
 import com.example.moodtrackerapp.R
 
 enum class Mood(
@@ -14,33 +11,39 @@ enum class Mood(
     HAPPY(
         apiKey = "HAPPY",
         label = "Senang",
-//        iconRes = R.drawable.ic_mood_happy
+        iconRes = R.drawable.ic_mood_happy
     ),
     SAD(
         apiKey = "SAD",
         label = "Sedih",
-//        iconRes = R.drawable.ic_mood_sad
+        iconRes = R.drawable.ic_mood_sad
     ),
     ANXIOUS(
         apiKey = "ANXIOUS",
         label = "Cemas",
-//        iconRes = R.drawable.ic_mood_anxious
+        iconRes = R.drawable.ic_mood_anxious
     ),
     DEPRESSED(
         apiKey = "DEPRESSED",
         label = "Muram",
-//        iconRes = R.drawable.ic_mood_depressed
+        iconRes = R.drawable.ic_mood_depressed
     ),
     NEUTRAL(
         apiKey = "NEUTRAL",
         label = "Netral",
-//        iconRes = R.drawable.ic_mood_neutral
+        iconRes = R.drawable.ic_mood_neutral
     ),
     STRESSED(
         apiKey = "STRESSED",
         label = "Stres",
-//        iconRes = R.drawable.ic_mood_stressed
-    );
+        iconRes = R.drawable.ic_mood_stressed
+    ),
+    PRODUCTIVE(
+        apiKey = "PRODUCTIVE",
+        label = "Produktif",
+        iconRes = R.drawable.ic_mood_productive
+    ),
+    ;
 
     companion object {
         // Fungsi helper untuk mapping string dari Response Backend Golang ke Enum Kotlin

@@ -20,7 +20,7 @@ import com.example.moodtrackerapp.moodcalendar.CalendarView
 import com.example.moodtrackerapp.util.addMonths
 import com.example.moodtrackerapp.util.getDatesOfMonth
 // Import package baru yang benar
-import com.example.moodtrackerapp.ui.components.AlertDialogExample
+import com.example.moodtrackerapp.moodcalendar.components.MoodDialog
 import com.example.moodtrackerapp.ui.theme.MoodTrackerAppTheme
 import com.example.moodtrackerapp.ui.theme.darkText
 import com.example.moodtrackerapp.util.formatToCalendarDay
@@ -127,7 +127,7 @@ class MainActivity : ComponentActivity() {
 //                        )
 //                    }
                     if (showMoodDialog && selectedDate != null) {
-                        AlertDialogExample(
+                        MoodDialog(
                             onDismissRequest = {
                                 showMoodDialog = false // Cukup tutup dialog tanpa langsung mengganggu state selectedDate
                             },

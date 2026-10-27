@@ -3,6 +3,8 @@ package com.example.moodtrackerapp.moodcalendar
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.example.moodtrackerapp.moodcalendar.components.calendar.CalendarCell
+import com.example.moodtrackerapp.moodcalendar.components.calendar.WeekdayCell
 import com.example.moodtrackerapp.util.formatToWeekDay
 import com.example.moodtrackerapp.util.getWeekDays
 import kotlinx.collections.immutable.ImmutableList
@@ -27,7 +29,7 @@ fun CalendarGrid(
             Spacer(modifier = Modifier)
         }
         date.forEach {
-            com.example.moodtrackerapp.moodcalendar.CalendarCell(
+            CalendarCell(
                 date = it.first,
                 signal = it.second,
                 onClick = { onClick(it.first) })

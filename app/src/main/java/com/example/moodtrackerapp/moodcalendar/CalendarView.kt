@@ -12,10 +12,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.moodtrackerapp.util.formatToMonthString
-import com.example.moodtrackerapp.ui.components.CustomIconButton
+import com.example.moodtrackerapp.moodcalendar.components.CustomIconButton
 import kotlinx.collections.immutable.ImmutableList
 import java.util.*
 

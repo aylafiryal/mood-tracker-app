@@ -1,4 +1,4 @@
-package com.example.moodtrackerapp.ui.components
+package com.example.moodtrackerapp.moodcalendar.components
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton

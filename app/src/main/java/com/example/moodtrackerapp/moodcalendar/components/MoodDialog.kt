@@ -17,30 +17,36 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.moodtrackerapp.model.Mood
 
 @Composable
 fun MoodDialog(
-    onDismissRequest: () -> Unit,
-    onConfirmation: () -> Unit,
-    dialogTitle: String,
-    dialogText: String,
-    icon: ImageVector,
+    onDismiss: () -> Unit,
+    onMoodSelected: (Mood?) -> Unit
 ) {
+    /*
+        NOTES:
+        Fungsi "remember" berguna untuk mempertahankan nilai sebuah variable.
+        Kalau mau pakai keyword "by", hasil di dalam blok remember mesti yang bisa didelegasikan.
+        Tipe data hasil yang bisa didelegasikan syaratnya adalah: punya fungsi getValue.
+        Biar kalo mau ubah value, bisa langsung dari variabelnya sendiri.
+    */
     // Simpan mood yang dipilih (null jika belum ada yang dipilih)
     var selectedMood by remember { mutableStateOf<Mood?>(null) }
 
     Dialog(
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         Surface(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
-                .fillMaxHeight(0.6f),
+                .wrapContentHeight(),
             shape = RoundedCornerShape(28.dp),
             color = MaterialTheme.colorScheme.tertiary
         ) {
@@ -48,41 +54,24 @@ fun MoodDialog(
             Column(
                 modifier = Modifier.padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                //verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
-                verticalArrangement = Arrangement.SpaceBetween
-                // Catatan: Jika ingin baris tombol nempel di paling bawah ala Bootstrap Card Footer,
-                // ganti baris di atas dengan: verticalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                // ROW 1: Icon (Full width / 12 col)
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = "Example Icon",
-                        tint = MaterialTheme.colorScheme.onTertiary
-                    )
-                }
 
-                // ROW 2: Title (Full width / 12 col)
+                // ROW 1: Title (Full width / 12 col)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
                 ) {
-//                    Text(
-//                        text = dialogTitle,
-//                        style = MaterialTheme.typography.headlineSmall,
-//                        color = MaterialTheme.colorScheme.onTertiary
-//                    )
                     Text(
                         text = selectedMood?.label ?: "Pilih perasaanmu",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onTertiary
+                        color = MaterialTheme.colorScheme.onTertiary,
+                        fontSize = 25.sp,
+                        fontWeight = FontWeight.Bold
                     )
                 }
 
-                // ROW 3: Grid Pilihan Mood (Dynamic Looping per 3 Kolom)
+                // ROW 2: Grid Pilihan Mood (Dynamic Looping per 3 Kolom)
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -102,7 +91,6 @@ fun MoodDialog(
                                 val resId = mood.iconRes
 
                                 // Jika iconRes ada nilainya, tampilkan Gambar
-//                                mood.iconRes?.let { resId ->
                                 if (resId != null && resId != 0) {
                                     Image(
                                         painter = painterResource(id = resId),
@@ -137,17 +125,22 @@ fun MoodDialog(
                     }
                 }
 
-                // ROW 4: Action Buttons (Full width / 12 col)
+                // ROW 3: Action Buttons (Full width / 12 col)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TextButton(onClick = onDismissRequest) {
-                        Text("Dismiss", color = MaterialTheme.colorScheme.onTertiary)
+                    TextButton(onClick = onDismiss) {
+                        Text("Dismiss", color = MaterialTheme.colorScheme.onTertiary, fontSize = 18.sp)
                     }
-                    TextButton(onClick = onConfirmation) {
-                        Text("Confirm", color = MaterialTheme.colorScheme.onTertiary)
+                    TextButton(
+                        onClick = {
+                            onMoodSelected(selectedMood)
+                            onDismiss()
+                        }
+                    ) {
+                        Text("Confirm", color = MaterialTheme.colorScheme.onTertiary, fontSize = 18.sp)
                     }
                 }
             }

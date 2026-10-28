@@ -1,19 +1,25 @@
 package com.example.moodtrackerapp.moodcalendar
 
+import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.moodtrackerapp.data.local.MoodDao
+import com.example.moodtrackerapp.data.local.MoodDatabase
+import com.example.moodtrackerapp.data.local.MoodEntity
 import com.example.moodtrackerapp.model.Mood
 import com.example.moodtrackerapp.util.addMonths
 import com.example.moodtrackerapp.util.getDatesOfMonth
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
 
-class MoodCalendarViewModel : ViewModel() {
-
+class MoodCalendarViewModel(private val repository: MoodDao): ViewModel() {
     /*
         NOTES:
         "Month" adalah nama objek MutableStateOf yang valuenya berupa objek Date.
@@ -30,7 +36,7 @@ class MoodCalendarViewModel : ViewModel() {
         }.toImmutableList()
     }
 
-    var selectedDate by mutableStateOf<Date?>(null)
+    var selectedDate by mutableStateOf(Date())
         private set
 
     var showMoodDialog by mutableStateOf(false)
@@ -48,9 +54,13 @@ class MoodCalendarViewModel : ViewModel() {
         showMoodDialog = false
     }
 
-    fun saveMood(mood: Mood?) {
+    fun saveMood(mood: Mood, date: Date) {
+        Log.d("LOG_MOOD", "Tanggal $date mood-nya adalah $mood")
         // Panggil database/repository di sini
-        Log.d("LOG_MOOD", "Tanggal $selectedDate mood-nya adalah $mood")
+        viewModelScope.launch {
+            val isoDate = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(date)
+            repository.insert(MoodEntity(date = isoDate, mood = mood))
+        }
         showMoodDialog = false
     }
 }

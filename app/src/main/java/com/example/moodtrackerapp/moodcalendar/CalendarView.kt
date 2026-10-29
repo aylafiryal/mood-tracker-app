@@ -13,20 +13,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.moodtrackerapp.data.local.MoodEntity
+import com.example.moodtrackerapp.model.Mood
 import com.example.moodtrackerapp.util.formatToMonthString
 import com.example.moodtrackerapp.moodcalendar.components.CustomIconButton
 import kotlinx.collections.immutable.ImmutableList
-import java.util.*
+import java.time.LocalDate
 
 @Composable
 fun CalendarView(
-    month: Date,
-    date: ImmutableList<Pair<Date, Boolean>>?,
+    month: LocalDate,
+    date: ImmutableList<LocalDate>?,
+    moodMap: Map<LocalDate, List<MoodEntity>>,
     displayNext: Boolean,
     displayPrev: Boolean,
     onClickNext: () -> Unit,
     onClickPrev: () -> Unit,
-    onClick: (Date) -> Unit,
+    onClick: (LocalDate) -> Unit,
     startFromSunday: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -60,6 +63,7 @@ fun CalendarView(
         if (!date.isNullOrEmpty()) {
             CalendarGrid(
                 date = date,
+                moodMap = moodMap,
                 onClick = onClick,
                 startFromSunday = startFromSunday,
                 modifier = Modifier

@@ -1,24 +1,28 @@
 package com.example.moodtrackerapp.moodcalendar.components.calendar
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.moodtrackerapp.data.local.MoodEntity
 import com.example.moodtrackerapp.util.formatToCalendarDay
-import java.util.Date
+import java.time.LocalDate
 
 @Composable
 fun CalendarCell(
-    date: Date,
-    signal: Boolean,
+    date: LocalDate,
+    listMoodEntity: List<MoodEntity>?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -41,17 +45,32 @@ fun CalendarCell(
                 .padding(end = 6.dp, top = 4.dp)
         )
 
-        if (signal) {
-            Box(
-                modifier = Modifier
-                    .padding(6.dp)
-                    .size(10.dp)
-                    .background(
-                        shape = CircleShape,
-                        color = colorScheme.tertiary
-                    )
-                    .align(Alignment.TopStart)
+        listMoodEntity?.let {
+            Text(
+                text = it.get(0).mood.label, // atau properti emoji/icon dari entity kamu
+                fontSize = 12.sp,
+                color = colorScheme.onSecondary
             )
+
+            listMoodEntity.forEach { rowMoods ->
+                Row(
+                    modifier = Modifier
+                    //modifier = Modifier.fillMaxWidth(),
+                    //horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    val mood = rowMoods.mood
+                    val resId = mood.iconRes
+
+                    if (resId != null && resId != 0) {
+                        Image(
+                            painter = painterResource(id = resId),
+                            contentDescription = mood.label,
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier
+                        )
+                    }
+                }
+            }
         }
     }
 }

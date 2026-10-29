@@ -15,37 +15,48 @@ import com.example.moodtrackerapp.model.Mood
 import com.example.moodtrackerapp.util.addMonths
 import com.example.moodtrackerapp.util.getDatesOfMonth
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
+import java.time.LocalDate
 
 class MoodCalendarViewModel(private val repository: MoodDao): ViewModel() {
     /*
         NOTES:
-        "Month" adalah nama objek MutableStateOf yang valuenya berupa objek Date.
+        "Month" adalah nama objek MutableStateOf yang valuenya berupa objek LocalDate.
         Fungsi dari MutableStateOf adalah agar nilainya bisa diamati oleh Compose.
     */
-    var month by mutableStateOf(Date())
+    var month by mutableStateOf(LocalDate.now())
         private set
 
-    val dates by derivedStateOf {
-        month.getDatesOfMonth().map { date ->
-            val cal = Calendar.getInstance().apply { time = date }
-            val day = cal.get(Calendar.DAY_OF_MONTH)
-            date to (day % 2 == 0)
-        }.toImmutableList()
-    }
+    val dates get() = month.getDatesOfMonth()
 
-    var selectedDate by mutableStateOf(Date())
+    var selectedDate by mutableStateOf(LocalDate.now())
         private set
 
     var showMoodDialog by mutableStateOf(false)
         private set
 
+    // Mengubah Flow<List<MoodEntity>> menjadi StateFlow<Map<LocalDate, MoodEntity>>
+    val moodMap: StateFlow<Map<LocalDate, List<MoodEntity>>> = repository.getAll()
+        .map { list ->
+            list.groupBy { entity ->
+                // Parsing String "yyyy-MM-dd" dari database ke LocalDate
+                LocalDate.parse(entity.date)
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyMap()
+        )
+
     fun nextMonth() { month = month.addMonths(1) }
     fun previousMonth() { month = month.addMonths(-1) }
 
-    fun onDateSelected(date: Date) {
+    fun onDateSelected(date: LocalDate) {
         selectedDate = date
         showMoodDialog = true
     }
@@ -54,12 +65,11 @@ class MoodCalendarViewModel(private val repository: MoodDao): ViewModel() {
         showMoodDialog = false
     }
 
-    fun saveMood(mood: Mood, date: Date) {
+    fun saveMood(mood: Mood, date: LocalDate) {
         Log.d("LOG_MOOD", "Tanggal $date mood-nya adalah $mood")
         // Panggil database/repository di sini
         viewModelScope.launch {
-            val isoDate = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(date)
-            repository.insert(MoodEntity(date = isoDate, mood = mood))
+            repository.insert(MoodEntity(date = date.toString(), mood = mood))
         }
         showMoodDialog = false
     }

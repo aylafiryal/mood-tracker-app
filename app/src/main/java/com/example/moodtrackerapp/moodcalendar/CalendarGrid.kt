@@ -3,23 +3,25 @@ package com.example.moodtrackerapp.moodcalendar
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.example.moodtrackerapp.data.local.MoodEntity
 import com.example.moodtrackerapp.moodcalendar.components.calendar.CalendarCell
 import com.example.moodtrackerapp.moodcalendar.components.calendar.WeekdayCell
 import com.example.moodtrackerapp.util.formatToWeekDay
 import com.example.moodtrackerapp.util.getWeekDays
 import kotlinx.collections.immutable.ImmutableList
-import java.util.*
+import java.time.LocalDate
 
 @Composable
 fun CalendarGrid(
-    date: ImmutableList<Pair<Date, Boolean>>,
-    onClick: (Date) -> Unit,
+    date: ImmutableList<LocalDate>,
+    moodMap: Map<LocalDate, List<MoodEntity>>,
+    onClick: (LocalDate) -> Unit,
     startFromSunday: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val weekdayFirstDay = date.first().first.formatToWeekDay()
+    val weekdayFirstDay = date.first().formatToWeekDay()
     val weekdays = getWeekDays(startFromSunday)
-    com.example.moodtrackerapp.moodcalendar.CalendarCustomLayout(modifier = modifier) {
+    CalendarCustomLayout(modifier = modifier) {
         weekdays.forEach {
             WeekdayCell(weekday = it)
         }
@@ -28,11 +30,12 @@ fun CalendarGrid(
         repeat((weekdayFirstDay - firstDayOfWeek + 7) % 7) {
             Spacer(modifier = Modifier)
         }
-        date.forEach {
+        date.forEach { itemDate ->
             CalendarCell(
-                date = it.first,
-                signal = it.second,
-                onClick = { onClick(it.first) })
+                date = itemDate,
+                listMoodEntity = moodMap[itemDate],
+                onClick = { onClick(itemDate) }
+            )
         }
     }
 }

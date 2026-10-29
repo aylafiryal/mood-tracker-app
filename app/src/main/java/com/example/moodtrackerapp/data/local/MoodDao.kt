@@ -4,16 +4,17 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MoodDao {
     // semua mood untuk semua tanggal
     @Query("SELECT * FROM mood_entry")
-    suspend fun getAll(): List<MoodEntity>
+    fun getAll(): Flow<List<MoodEntity>>
 
     // mood per tanggal (format ISO "yyyy-MM-dd")
     @Query("SELECT * FROM mood_entry WHERE date = :date")
-    suspend fun loadAllByDate(date: String): List<MoodEntity>
+    fun loadAllByDate(date: String): List<MoodEntity>
 
     // insert mood untuk sebuah tanggal
     @Insert
@@ -21,5 +22,5 @@ interface MoodDao {
 
     // delete mood dari sebuah tanggal
     @Delete
-    suspend fun delete(entry: MoodEntity)
+    fun delete(entry: MoodEntity)
 }

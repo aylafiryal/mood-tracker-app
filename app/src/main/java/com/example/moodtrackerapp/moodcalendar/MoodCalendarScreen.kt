@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.moodtrackerapp.moodcalendar.components.MoodDialog
@@ -29,6 +31,8 @@ fun MoodCalendarScreen(
     // 3. Masukkan factory ke fungsi viewModel()
     val viewModel: MoodCalendarViewModel = viewModel(factory = factory)
 
+    val moodMap by viewModel.moodMap.collectAsState()
+
     /*
         NOTES:
         Fungsi `Scaffold` butuh banyak parameter. Tapi mostly, semuanya punya default value.
@@ -48,6 +52,7 @@ fun MoodCalendarScreen(
         CalendarView(
             month = viewModel.month,
             date = viewModel.dates,
+            moodMap = moodMap,
             displayNext = true,
             displayPrev = true,
             onClickNext = { viewModel.nextMonth() },

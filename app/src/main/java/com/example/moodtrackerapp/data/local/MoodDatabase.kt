@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import android.content.Context
 import androidx.room.TypeConverters
+import java.util.concurrent.Executors
 
 @Database(entities = [MoodEntity::class], version = 1)
 @TypeConverters(MoodConverter::class)
@@ -23,7 +24,11 @@ abstract class MoodDatabase : RoomDatabase() {
                     context.applicationContext, // Secures the Application Context safely
                     MoodDatabase::class.java,
                     "mood-tracker-app-database"
-                ).build()
+                )
+                    .setQueryCallback({ sqlQuery, bindArgs ->
+                        android.util.Log.d("ROOM_LOG", "Query: $sqlQuery | Args: $bindArgs")
+                    }, Executors.newSingleThreadExecutor())
+                    .build()
                 INSTANCE = instance
                 instance
             }

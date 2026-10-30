@@ -9,13 +9,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.moodtrackerapp.moodcalendar.components.MoodDialog
 import com.example.moodtrackerapp.ui.theme.darkText
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.moodtrackerapp.data.local.MoodCalendarViewModelFactory
 import com.example.moodtrackerapp.data.local.MoodDatabase
+import com.example.moodtrackerapp.moodcalendar.components.MoodDetailDialog
+import java.time.LocalDate
 
 @Composable
 fun MoodCalendarScreen(
@@ -32,6 +38,10 @@ fun MoodCalendarScreen(
     val viewModel: MoodCalendarViewModel = viewModel(factory = factory)
 
     val moodMap by viewModel.moodMap.collectAsState()
+
+    val moodByDateState by viewModel.moodByDate.collectAsStateWithLifecycle()
+
+    val selectedDate by viewModel.selectedDate.collectAsStateWithLifecycle()
 
     /*
         NOTES:
@@ -58,18 +68,30 @@ fun MoodCalendarScreen(
             onClickNext = { viewModel.nextMonth() },
             onClickPrev = { viewModel.previousMonth() },
             onClick = { clickedDate ->
-                viewModel.onDateSelected(clickedDate)
+                if(moodMap[clickedDate] == null) {
+                    viewModel.onDateSelected(clickedDate, false)
+                } else {
+                    viewModel.onDateSelected(clickedDate, true)
+                }
             },
             startFromSunday = true,
             modifier = Modifier.padding(innerPadding)
         )
 
-        if (viewModel.showMoodDialog && viewModel.selectedDate != null) {
+        if (viewModel.showMoodDialog && selectedDate != null) {
             MoodDialog(onDismiss = {
                 viewModel.dismissDialog()
             }, onMoodSelected = { mood ->
-                mood?.let { viewModel.saveMood(it, viewModel.selectedDate) }
+                mood?.let { viewModel.saveMood(it, selectedDate) }
             })
+        }
+
+        if (viewModel.showMoodDetailDialog && selectedDate != null) {
+            MoodDetailDialog(
+                selectedDate = selectedDate,
+                onDismiss = { viewModel.dismissDialog() },
+                moodList = moodByDateState
+            )
         }
     }
 }

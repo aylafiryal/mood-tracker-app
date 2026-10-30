@@ -14,7 +14,7 @@ interface MoodDao {
 
     // mood per tanggal (format ISO "yyyy-MM-dd")
     @Query("SELECT * FROM mood_entry WHERE date = :date")
-    fun loadAllByDate(date: String): List<MoodEntity>
+    fun loadAllByDate(date: String): Flow<List<MoodEntity>>
 
     // insert mood untuk sebuah tanggal
     @Insert

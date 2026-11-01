@@ -9,19 +9,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.moodtrackerapp.moodcalendar.components.MoodDialog
+import com.example.moodtrackerapp.moodcalendar.components.dialog.MoodDialog
 import com.example.moodtrackerapp.ui.theme.darkText
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.moodtrackerapp.data.local.MoodCalendarViewModelFactory
 import com.example.moodtrackerapp.data.local.MoodDatabase
-import com.example.moodtrackerapp.moodcalendar.components.MoodDetailDialog
-import java.time.LocalDate
+import com.example.moodtrackerapp.moodcalendar.components.dialog.MoodDetailDialog
 
 @Composable
 fun MoodCalendarScreen(
@@ -78,20 +74,22 @@ fun MoodCalendarScreen(
             modifier = Modifier.padding(innerPadding)
         )
 
+        if (viewModel.showMoodDetailDialog && selectedDate != null) {
+            MoodDetailDialog(
+                selectedDate = selectedDate,
+                moodList = moodByDateState,
+                onDismiss = { viewModel.dismissDialog()}
+            ) {
+                viewModel.onAddNewMood()
+            }
+        }
+
         if (viewModel.showMoodDialog && selectedDate != null) {
             MoodDialog(onDismiss = {
                 viewModel.dismissDialog()
             }, onMoodSelected = { mood ->
                 mood?.let { viewModel.saveMood(it, selectedDate) }
             })
-        }
-
-        if (viewModel.showMoodDetailDialog && selectedDate != null) {
-            MoodDetailDialog(
-                selectedDate = selectedDate,
-                onDismiss = { viewModel.dismissDialog() },
-                moodList = moodByDateState
-            )
         }
     }
 }

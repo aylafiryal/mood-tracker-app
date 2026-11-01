@@ -89,6 +89,11 @@ class MoodCalendarViewModel(private val repository: MoodDao): ViewModel() {
         }
     }
 
+    fun onAddNewMood() {
+        showMoodDetailDialog = false
+        showMoodDialog = true
+    }
+
     fun dismissDialog() {
         showMoodDialog = false
         showMoodDetailDialog = false

@@ -17,6 +17,7 @@ import com.example.moodtrackerapp.ui.theme.darkText
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.moodtrackerapp.data.local.MoodCalendarViewModelFactory
 import com.example.moodtrackerapp.data.local.MoodDatabase
+import com.example.moodtrackerapp.data.local.MoodEntity
 import com.example.moodtrackerapp.moodcalendar.components.dialog.MoodDetailDialog
 
 @Composable
@@ -70,6 +71,7 @@ fun MoodCalendarScreen(
                     viewModel.onDateSelected(clickedDate, true)
                 }
             },
+            onDeleteClick = {},
             startFromSunday = true,
             modifier = Modifier.padding(innerPadding)
         )
@@ -78,10 +80,10 @@ fun MoodCalendarScreen(
             MoodDetailDialog(
                 selectedDate = selectedDate,
                 moodList = moodByDateState,
-                onDismiss = { viewModel.dismissDialog()}
-            ) {
-                viewModel.onAddNewMood()
-            }
+                onDismiss = { viewModel.dismissDialog()},
+                onAddNewMood = { viewModel.onAddNewMood() },
+                onDeleteMood = {  }
+            )
         }
 
         if (viewModel.showMoodDialog && selectedDate != null) {

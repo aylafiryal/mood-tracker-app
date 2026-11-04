@@ -94,6 +94,13 @@ class MoodCalendarViewModel(private val repository: MoodDao): ViewModel() {
         showMoodDialog = true
     }
 
+    fun onDeleteMood (entity: MoodEntity) {
+        viewModelScope.launch {
+            repository.delete(entity)
+        }
+        showMoodDialog = false
+    }
+
     fun dismissDialog() {
         showMoodDialog = false
         showMoodDetailDialog = false

@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.moodtrackerapp.R
+import com.example.moodtrackerapp.data.local.MoodEntity
 import com.example.moodtrackerapp.model.Mood
 import com.example.moodtrackerapp.util.formatToCalendarDay
 import com.example.moodtrackerapp.util.formatToMonthString
@@ -49,7 +50,7 @@ fun MoodDetailDialog(
     moodList: ImmutableList<Mood>,
     onDismiss: () -> Unit,
     onAddNewMood: () -> Unit,
-    onDeleteMood: () -> Unit,
+    onDeleteMood: (MoodEntity) -> Unit,
 ) {
     val formattedDate = "${selectedDate.formatToCalendarDay()} ${selectedDate.formatToMonthString()}"
     //val isAddDisabled = moodList.size >= 3
@@ -144,6 +145,10 @@ fun MoodDetailDialog(
                                                 .size(24.dp)
                                                 .align(Alignment.TopEnd) // Pojok kanan atas (atau Alignment.TopStart untuk kiri atas)
                                                 .offset(x = 6.dp, y = (-6).dp) // Menggeser ikon tepat menimpa garis border
+                                                .clickable {
+                                                    // val entity = MoodEntity()
+                                                    // onDeleteMood(selectedMood)
+                                                }
                                         )
                                     }
                                 }

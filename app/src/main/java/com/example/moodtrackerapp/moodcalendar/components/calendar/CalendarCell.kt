@@ -27,6 +27,7 @@ fun CalendarCell(
     listMoodEntity: List<MoodEntity>?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onDeleteClick: (MoodEntity) -> Unit
 ) {
     val text = date.formatToCalendarDay()
     Box(
@@ -60,7 +61,9 @@ fun CalendarCell(
                         painter = painterResource(id = resId),
                         contentDescription = entity.mood.label,
                         contentScale = ContentScale.Fit,
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable { onDeleteClick(entity) }
                     )
                 }
             }

@@ -16,7 +16,6 @@ fun CalendarGrid(
     date: ImmutableList<LocalDate>,
     moodMap: Map<LocalDate, List<MoodEntity>>,
     onClick: (LocalDate) -> Unit,
-    onDeleteClick: (MoodEntity) -> Unit,
     startFromSunday: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -35,8 +34,7 @@ fun CalendarGrid(
             CalendarCell(
                 date = itemDate,
                 listMoodEntity = moodMap[itemDate],
-                onClick = { onClick(itemDate) },
-                onDeleteClick = { moodMap[itemDate]?.forEach { moodEntity -> onDeleteClick(moodEntity) } }
+                onClick = { onClick(itemDate) }
             )
         }
     }

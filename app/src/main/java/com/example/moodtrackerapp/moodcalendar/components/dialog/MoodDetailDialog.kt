@@ -47,7 +47,7 @@ import java.time.LocalDate
 @Composable
 fun MoodDetailDialog(
     selectedDate: LocalDate,
-    moodList: ImmutableList<Mood>,
+    moodList: ImmutableList<MoodEntity>,
     onDismiss: () -> Unit,
     onAddNewMood: () -> Unit,
     onDeleteMood: (MoodEntity) -> Unit,
@@ -56,7 +56,7 @@ fun MoodDetailDialog(
     //val isAddDisabled = moodList.size >= 3
     val isAddDisabled = remember(moodList) { moodList.size >= 3 }
 
-    var selectedMood by remember { mutableStateOf<Mood?>(null) }
+    var selectedMood by remember { mutableStateOf<MoodEntity?>(null) }
 
     Dialog(
         onDismissRequest = onDismiss
@@ -99,7 +99,7 @@ fun MoodDetailDialog(
                     ) {
                         moodList.forEach { mood ->
                             val isSelected = selectedMood == mood
-                            val resId = mood.iconRes
+                            val resId = mood.mood.iconRes
 
                             if (resId != null && resId != 0) {
                                 // Box Luar: Memberikan ruang (padding) agar offset ikon tidak terpotong dialog
@@ -129,7 +129,7 @@ fun MoodDetailDialog(
                                     ) {
                                         Image(
                                             painter = painterResource(id = resId),
-                                            contentDescription = mood.label,
+                                            contentDescription = mood.mood.label,
                                             contentScale = ContentScale.Fit,
                                             modifier = Modifier.fillMaxSize()
                                         )
@@ -139,15 +139,15 @@ fun MoodDetailDialog(
                                     if (isSelected) {
                                         Image(
                                             painter = painterResource(id = R.drawable.delete_circle),
-                                            contentDescription = "Unselect",
+                                            contentDescription = "Hapus ${mood.mood.label}",
                                             contentScale = ContentScale.Fit,
                                             modifier = Modifier
                                                 .size(24.dp)
                                                 .align(Alignment.TopEnd) // Pojok kanan atas (atau Alignment.TopStart untuk kiri atas)
                                                 .offset(x = 6.dp, y = (-6).dp) // Menggeser ikon tepat menimpa garis border
                                                 .clickable {
-                                                    // val entity = MoodEntity()
-                                                    // onDeleteMood(selectedMood)
+                                                    onDeleteMood(mood)
+                                                    selectedMood = null
                                                 }
                                         )
                                     }

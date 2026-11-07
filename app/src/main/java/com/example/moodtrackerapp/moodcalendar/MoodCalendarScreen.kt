@@ -71,7 +71,6 @@ fun MoodCalendarScreen(
                     viewModel.onDateSelected(clickedDate, true)
                 }
             },
-            onDeleteClick = {},
             startFromSunday = true,
             modifier = Modifier.padding(innerPadding)
         )
@@ -82,7 +81,7 @@ fun MoodCalendarScreen(
                 moodList = moodByDateState,
                 onDismiss = { viewModel.dismissDialog()},
                 onAddNewMood = { viewModel.onAddNewMood() },
-                onDeleteMood = {  }
+                onDeleteMood = { entity -> viewModel.onDeleteMood(entity) }
             )
         }
 

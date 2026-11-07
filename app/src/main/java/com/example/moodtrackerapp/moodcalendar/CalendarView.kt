@@ -30,7 +30,6 @@ fun CalendarView(
     onClickNext: () -> Unit,
     onClickPrev: () -> Unit,
     onClick: (LocalDate) -> Unit,
-    onDeleteClick: (MoodEntity) -> Unit,
     startFromSunday: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -66,7 +65,6 @@ fun CalendarView(
                 date = date,
                 moodMap = moodMap,
                 onClick = onClick,
-                onDeleteClick = onDeleteClick,
                 startFromSunday = startFromSunday,
                 modifier = Modifier
                     .weight(1f)

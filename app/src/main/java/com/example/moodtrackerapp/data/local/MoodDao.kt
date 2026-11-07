@@ -22,5 +22,5 @@ interface MoodDao {
 
     // delete mood dari sebuah tanggal
     @Delete
-    fun delete(entry: MoodEntity)
+    suspend fun delete(entry: MoodEntity)
 }

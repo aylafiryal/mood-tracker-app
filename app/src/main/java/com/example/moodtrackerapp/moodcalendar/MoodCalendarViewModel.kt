@@ -63,14 +63,11 @@ class MoodCalendarViewModel(private val repository: MoodDao): ViewModel() {
         )
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val moodByDate: StateFlow<ImmutableList<Mood>> = _selectedDate
+    val moodByDate: StateFlow<ImmutableList<MoodEntity>> = _selectedDate
         .flatMapLatest { date ->
             repository.loadAllByDate(date.toString())
         }
-        .map { entities ->
-            entities.map { it.mood }
-                .toImmutableList()
-        }
+        .map { entities -> entities.toImmutableList() }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -98,7 +95,8 @@ class MoodCalendarViewModel(private val repository: MoodDao): ViewModel() {
         viewModelScope.launch {
             repository.delete(entity)
         }
-        showMoodDialog = false
+        // Kalau ini mood terakhir di tanggal itu, tutup dialog detail (biar gak tampil dialog kosong)
+        if (moodByDate.value.size <= 1) showMoodDetailDialog = false
     }
 
     fun dismissDialog() {

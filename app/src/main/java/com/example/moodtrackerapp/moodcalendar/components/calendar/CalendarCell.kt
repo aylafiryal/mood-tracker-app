@@ -26,8 +26,7 @@ fun CalendarCell(
     date: LocalDate,
     listMoodEntity: List<MoodEntity>?,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    onDeleteClick: (MoodEntity) -> Unit
+    modifier: Modifier = Modifier
 ) {
     val text = date.formatToCalendarDay()
     Box(
@@ -63,7 +62,6 @@ fun CalendarCell(
                         contentScale = ContentScale.Fit,
                         modifier = Modifier
                             .size(32.dp)
-                            .clickable { onDeleteClick(entity) }
                     )
                 }
             }

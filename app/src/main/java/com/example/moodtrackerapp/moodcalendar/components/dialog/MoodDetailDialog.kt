@@ -97,6 +97,16 @@ fun MoodDetailDialog(
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+
+                        if(moodList.isEmpty()){
+                            Text(
+                                text = "Belum ada mood",
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onTertiary,
+                                fontSize = 18.sp
+                            )
+                        }
+
                         moodList.forEach { mood ->
                             val isSelected = selectedMood == mood
                             val resId = mood.mood.iconRes

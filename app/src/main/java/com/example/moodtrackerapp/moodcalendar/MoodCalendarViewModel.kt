@@ -95,8 +95,6 @@ class MoodCalendarViewModel(private val repository: MoodDao): ViewModel() {
         viewModelScope.launch {
             repository.delete(entity)
         }
-        // Kalau ini mood terakhir di tanggal itu, tutup dialog detail (biar gak tampil dialog kosong)
-        if (moodByDate.value.size <= 1) showMoodDetailDialog = false
     }
 
     fun dismissDialog() {

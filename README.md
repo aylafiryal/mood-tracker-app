@@ -1,9 +1,10 @@
-<div id="toc">
-  <ul align="center" style="list-style: none">
-    <summary>
-      <h1>
-        H1
-      </h1>
-    </summary>
-  </ul>
-</div>
+<h1 align="center">Mood Tracker App</h1>
+<p align="center">
+  <em>Track your daily feelings to get to know more about yourself 🧸</em>
+</p>
+
+## What is it?
+
+## How to run it?
+
+## How far is it now?

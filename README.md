@@ -21,14 +21,13 @@ Releases tab once the first version is out.
 
 ## How far is it now?
 
-Currently cooking **iteration 1** 🌱
-
-- [x] See your month in a calendar
-- [x] Record your 3 moods of the day (morning, afternoon, night)
+Currently cooking **iteration 2** 🌱
 
 ## How did it get here?
 
 I decided to use iterative software development life cycle instead of waterfall because I don't want to feel overwhelmed with all the ideas and designs that I have to prepare beforehand. Every tiny step is what helps me to enjoy building this app without feeling any pressures. Always celebrate every accomplished iteration with an ice cream 🍦 and (don't forget) a **productive** mood stamp in the app <img src="app/src/main/res/drawable/ic_mood_productive.webp" width="20" alt="productive mood">.
+
+Read my iteration diary here:
 
 1. [Iteration 1: Local app development using Room](https://github.com/aylafiryal/mood-tracker-app/blob/master/docs/iterations/iteration-01.md)
 

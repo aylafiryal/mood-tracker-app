@@ -29,7 +29,7 @@ I decided to use iterative software development life cycle instead of waterfall 
 
 Read my iteration diary here:
 
-1. [Iteration 1: Local app development using Room](https://github.com/aylafiryal/mood-tracker-app/blob/master/docs/iterations/iteration-01.md)
+1. [Iteration 1: Local app development using Room](https://github.com/aylafiryal/mood-tracker-app/blob/master/docs/iterations/iteration-01/iteration-01.md)
 
 # What's next? 
 Whatever feels like the most fun to build 🧸
